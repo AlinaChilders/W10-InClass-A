@@ -21,9 +21,19 @@ feedback.connect(delay);
 delay.connect(outputGain);
 outputGain.connect(audioContext.destination);
 
+let mic;
+const startMic = async function () {
+  await audioContext.resume();
+  const access = await navigator.mediaDevices.getUserMedia({ audio: true });
+  mic = audioContext.createMediaStreamSource(stream);
+  mic.connect(destination);
+  console.log("Audio Started");
+};
 
-
+const stopMic = async function () {
+  if (mic) mic.disconnect();
+};
 
 // Set up event listeners for the Start and Stop buttons
-document.getElementById('start').addEventListener("click", startMic);
-document.getElementById('stop').addEventListener("click", stopMic);
+document.getElementById("start").addEventListener("click", startMic);
+document.getElementById("stop").addEventListener("click", stopMic);
